@@ -7,14 +7,21 @@
 //Game.creeps['Harvester1'].memory.role = 'harvester';
 //Game.creeps['Upgrader1'].memory.role = 'upgrader';
 
-//Creates an object of the branch of role.harvester.
+//Aquires necessary functions.
 var roleHarvester = require('role.harvester');
+var roleUpgrader = require('role.upgrader');
 
-//The programs main executable loop.
+//Main programs executable loop.
 module.exports.loop = function () {
-    //Searches through each creep and asks it to complete the task of the function.
+    //Goes through each loop of the program and then asks what the creeps name
+    //is to do the right function.
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
-        roleHarvester.run(creep);
+        if(creep.memory.role == 'harvester') {
+            roleHarvester.run(creep);
+        }
+        if(creep.memory.role == 'upgrader') {
+            roleUpgrader.run(creep);
+        }
     }
 }
