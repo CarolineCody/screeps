@@ -1,3 +1,6 @@
+//How to build a big chungus.
+//Game.spawns['Spawn1'].spawnCreep( [WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE],'HarvesterBig',{ memory: { role: 'harvester' } } );
+
 var roleHarvester = require('role.harvester');
 var roleBuilder = require('role.builder');
 
