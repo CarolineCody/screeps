@@ -1,19 +1,30 @@
-//How to make a standard worker creep of the builder type.
-//Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Builder1',{ memory: { role: 'builder' } } );
-
-//Gets required files.
-var roleHarvester = require('role.harvester');
-var roleBuilder = require('role.builder');
-
-module.exports.loop = function () {
-    //starts building stuff.
-    for(var name in Game.creeps) {
-        var creep = Game.creeps[name];
-        if(creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
+var roleHarvester = {
+    //default function call for the creep.
+    /** @param {Creep} creep **/
+    run: function(creep) {
+        //If the creep still has inventory space.
+	    if(creep.store.getFreeCapacity() > 0) {
+            var sources = creep.room.find(FIND_SOURCES);
+            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            }
         }
-        if(creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
+        else {
+            //Looks for structure extensions to the spond to fill spaces.
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+            });
+            //Transfers resources out.
+            if(targets.length > 0) {
+                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            }
         }
-    }
-}
+	}
+};
+
+module.exports = roleHarvester;
