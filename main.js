@@ -15,7 +15,9 @@ var roleBuilder = require('role.builder');
 module.exports.loop = function () {
     
     //Gets the tower to preform any defense requirements and repair all structures.
-    var tower = Game.getObjectById('299f364376fda88b941461db');
+//     for(var name in Game.towers){
+//         var tower = Game.towers[name];
+//     }
     if(tower) {
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => structure.hits < structure.hitsMax
